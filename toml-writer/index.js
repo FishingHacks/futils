@@ -27,7 +27,7 @@
  * SOFTWARE.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineCustomWriters = exports.parseArray = exports.parseInlineObject = exports.parseValue = exports.parseKey = exports.parseSymbol = exports.parseFunction = exports.parseBigInt = exports.parseDate = exports.parseBoolean = exports.parseNumber = exports.parseString = void 0;
+exports.defineCustomWriters = exports.writeArray = exports.writeInlineObject = exports.writeValue = exports.writeKey = exports.writeSymbol = exports.writeFunction = exports.writeBigInt = exports.writeDate = exports.writeBoolean = exports.writeNumber = exports.writeString = void 0;
 function needsQuotes(str) {
     return str.match(/^[A-Za-z0-9_-]+$/) === null || str === '';
 }
@@ -40,14 +40,14 @@ const escapes = {
     '\r': '\\r',
     "'": "\\'",
 };
-let $parsers = {};
-function parseString(str) {
+let $writers = {};
+function writeString(str) {
     for (const k in escapes)
         str = str.replaceAll(k, escapes[k]);
     return `'${str}'`;
 }
-exports.parseString = parseString;
-function parseNumber(num, format = 'base-10') {
+exports.writeString = writeString;
+function writeNumber(num, format = 'base-10') {
     if (!isFinite(num))
         return `${0 < num ? '+' : '-'}inf`;
     if (isNaN(num))
@@ -68,93 +68,93 @@ function parseNumber(num, format = 'base-10') {
                 ? 2
                 : 10)}`;
 }
-exports.parseNumber = parseNumber;
-function parseBoolean(value) {
+exports.writeNumber = writeNumber;
+function writeBoolean(value) {
     return value ? 'true' : 'false';
 }
-exports.parseBoolean = parseBoolean;
-function parseDate(date) {
+exports.writeBoolean = writeBoolean;
+function writeDate(date) {
     if (typeof date === 'object')
         return date.toISOString();
     const _d = new Date();
     _d.setTime(date);
     return _d.toISOString();
 }
-exports.parseDate = parseDate;
-function parseBigInt(value) {
-    return parseNumber(Number(value), 'hex');
+exports.writeDate = writeDate;
+function writeBigInt(value) {
+    return writeNumber(Number(value), 'hex');
 }
-exports.parseBigInt = parseBigInt;
-function parseFunction(fn) {
-    return parseString(fn.toString());
+exports.writeBigInt = writeBigInt;
+function writeFunction(fn) {
+    return writeString(fn.toString());
 }
-exports.parseFunction = parseFunction;
-function parseSymbol(symbol) {
+exports.writeFunction = writeFunction;
+function writeSymbol(symbol) {
     return symbol.toString();
 }
-exports.parseSymbol = parseSymbol;
-function parseKey(key) {
+exports.writeSymbol = writeSymbol;
+function writeKey(key) {
     return needsQuotes(key)
         ? `"${key.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
         : key;
 }
-exports.parseKey = parseKey;
-function parseValue(value) {
+exports.writeKey = writeKey;
+function writeValue(value) {
     if (value === null || value === undefined)
-        throw new Error('Cannot parse undefined or null');
+        throw new Error('Cannot write undefined or null');
     if (typeof value === 'bigint')
-        return parseBigInt(value);
+        return writeBigInt(value);
     if (typeof value === 'boolean')
-        return parseBoolean(value);
+        return writeBoolean(value);
     if (typeof value === 'function')
-        return parseFunction(value);
+        return writeFunction(value);
     if (typeof value === 'number')
-        return parseNumber(value);
+        return writeNumber(value);
     if (typeof value === 'string')
-        return parseString(value);
+        return writeString(value);
     if (typeof value === 'symbol')
-        return parseSymbol(value);
+        return writeSymbol(value);
     const _val = value;
     if (_val instanceof Date)
-        return parseDate(_val);
+        return writeDate(_val);
     if (_val instanceof Array)
-        return parseArray(_val);
+        return writeArray(_val);
     if (_val.constructor && _val.constructor.name) {
-        for (const k in $parsers)
+        for (const k in $writers)
             if (_val.constructor.name === k)
-                return $parsers[k](_val);
+                return $writers[k](_val);
     }
-    return parseInlineObject(value);
+    return writeInlineObject(value);
 }
-exports.parseValue = parseValue;
-function parseInlineObject(obj) {
-    let parsed = '{';
+exports.writeValue = writeValue;
+function writeInlineObject(obj) {
+    let writed = '{';
     for (const [k, v] of Object.entries(obj)) {
-        parsed += ' ' + parseKey(k);
-        parsed += ' = ';
-        parsed += parseValue(v) + ',';
+        writed += ' ' + writeKey(k);
+        writed += ' = ';
+        writed += writeValue(v) + ',';
     }
-    return parsed.substring(0, parsed.length - 1) + ' }';
+    return writed.substring(0, writed.length - 1) + ' }';
 }
-exports.parseInlineObject = parseInlineObject;
-function parseArray(arr) {
-    let parsed = '[';
+exports.writeInlineObject = writeInlineObject;
+function writeArray(arr) {
+    let writed = '[';
     for (const v of arr)
-        parsed += ` ${parseValue(v)},`;
-    return parsed + ' ]';
+        writed += ` ${writeValue(v)},`;
+    return writed + ' ]';
 }
-exports.parseArray = parseArray;
+exports.writeArray = writeArray;
 function defineCustomWriters(writers) {
-    $parsers = { ...$parsers, ...writers };
+    $writers = { ...$writers, ...writers };
 }
 exports.defineCustomWriters = defineCustomWriters;
 function write(obj) {
-    let parsed = '';
+    let writed = '';
     for (const [k, v] of Object.entries(obj)) {
-        parsed += '\n' + parseKey(k);
-        parsed += ' = ';
-        parsed += parseValue(v);
+        writed += '\n' + writeKey(k);
+        writed += ' = ';
+        writed += writeValue(v);
     }
-    return parsed.substring(1);
+    return writed.substring(1);
 }
 exports.default = write;
