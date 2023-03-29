@@ -4,7 +4,20 @@ A library of one-file utils for nodejs. All modules that dont use imports should
 
 ## Utils
 
-| NPM Package                                                            | Typescript File (`.ts`)                        | Javascript File (`.js`)                        | Types File (`.d.ts`)                             | Uses imports | help                                     |
-| ---------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ | ------------ | ---------------------------------------- |
-| [`@futils/toml-writer`](https://npmjs.com/@futils/toml-writer)         | [toml-writer/](./toml-writer/index.ts)         | [toml-writer/](./toml-writer/index.js)         | [toml-writer/](./toml-writer/index.d.ts)         | [ ] No       | [README.MD](./toml-writer/README.MD)     |
-| [`@futils/multi-threading`](https://npmjs.com/@futils/multi-threading) | [multi-threading/](./multi-threading/index.ts) | [multi-threading/](./multi-threading/index.js) | [multi-threading/](./multi-threading/index.d.ts) | [x] Yes      | [README.MD](./multi-threading/README.MD) |
+### toml-writer
+
+- NPM Package: [`@futils/toml-writer`](https://npmjs.com/@futils/toml-writer)
+- Typescript File: [toml-writer/](./toml-writer/index.ts)
+- Javascript File: [toml-writer/](./toml-writer/index.js)
+- Types File: [toml-writer/](./toml-writer/index.d.ts)
+- Uses imports: [ ] No
+- Help: [README.MD](./toml-writer/README.MD)
+
+### multi-threading
+
+- NPM Package: [`@futils/multi-threading`](https://npmjs.com/@futils/multi-threading)
+- Typescript File: [multi-threading/](./multi-threading/index.ts)
+- Javascript File: [multi-threading/](./multi-threading/index.js)
+- Types File: [multi-threading/](./multi-threading/index.d.ts)
+- Uses imports: [ ] No
+- Help: [README.MD](./multi-threading/README.MD)
