@@ -1,7 +1,7 @@
 {
-  "name": "@futils/toml-writer",
-  "version": "1.0.2",
-  "description": "A simple toml writer",
+  "name": "@futils/multi-threading",
+  "version": "1.0.0",
+  "description": "A simple multithreading library",
   "main": "index.js",
   "repository": {
     "type": "git",
