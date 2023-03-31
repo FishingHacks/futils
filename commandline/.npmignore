@@ -1,0 +1,4 @@
+*.ts
+out/
+build.js
+!*.d.ts
