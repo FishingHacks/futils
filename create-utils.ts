@@ -62,9 +62,6 @@ writeFileSync(
     "type": "git",
     "url": "git+https://github.com/FishingHacks/futils.git"
   },
-  "scripts": {
-    "publish": "npm publish --access public"
-  },
   "keywords": [
     "TOML"
   ],
